@@ -17,7 +17,6 @@ $URL = [];
 require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'urls.php';
 # --
 
-
 use App\System\Application;
 $app = new Application();
 
