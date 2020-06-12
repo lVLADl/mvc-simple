@@ -6,7 +6,9 @@ namespace App\Controllers;
 
 class ExampleController extends Controller {
     public function index() {
-        global $twig;
-        echo $twig->render('index.twig', ['name' => 'Fabien']);
+        return render('index', [
+            'name' => 'Fabien',
+            'arr' => ['a', 'b', 'c']
+        ]);
     }
 }

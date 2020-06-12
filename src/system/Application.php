@@ -23,7 +23,7 @@ class Application {
                 # --
                 $result = $url_instance->call_method();
 
-                echo $result;
+                print_r($result);
             } else {
                 page_404($method . ' method is not supported');
             }

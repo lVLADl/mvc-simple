@@ -32,6 +32,10 @@ require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'url
         'debug' => config('general.debug')
     ]);
     # --
+
+    # -- Loading filters
+    require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'System' . DIRECTORY_SEPARATOR . 'Template' . DIRECTORY_SEPARATOR . 'filters.php';
+    # --
 # --
 
 use App\System\Application;

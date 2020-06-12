@@ -50,3 +50,11 @@ function page_404($msg) {
     throw new \Exception($msg);
     # TODO: Handle not found-section
 };
+
+function render(string $template_name, array $args) {
+    global $twig;
+
+    # TODO: Add middlewares
+    $args['app_name'] = (string) config('general.app-name');
+    return $twig->render($template_name . '.twig', $args);
+}
