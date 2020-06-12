@@ -11,20 +11,24 @@ class Application {
 
         if(isset($URL[$_SERVER['REQUEST_URI']])) {
             $url_instance = $URL[$_SERVER['REQUEST_URI']];
-            /*
-             *
-             * TODO:
-             * Middleware-section
-             *
-             */
-            # --
-            $result = $url_instance->call_method();
+            $method = $_SERVER['REQUEST_METHOD'];
 
+            if($url_instance->getMethod() == $method) {
+                /*
+                 *
+                 * TODO:
+                 * Middleware-section
+                 *
+                 */
+                # --
+                $result = $url_instance->call_method();
 
-            echo ($result);
+                echo $result;
+            } else {
+                page_404($method . ' method is not supported');
+            }
         } else {
-            # throw new \Exception('Page not found');
-            # TODO: Handle not found-section
+            page_404('Page not found');
         }
     }
 }

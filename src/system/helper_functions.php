@@ -44,3 +44,9 @@ function delete($url, $controller) {
     global $URL;
     $URL[$url] = new \App\System\URL\URLInstance($url, 'DELETE', $controller);
 }
+
+
+function page_404($msg) {
+    throw new \Exception($msg);
+    # TODO: Handle not found-section
+};

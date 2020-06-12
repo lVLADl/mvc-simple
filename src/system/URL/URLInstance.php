@@ -53,7 +53,6 @@ class URLInstance implements HTTPMethods {
                 throw new \Exception("The method isn't supported.");
                 break;
         }
-        $this->method = $method;
     }
     public function getMethod() {
         $result = null;
