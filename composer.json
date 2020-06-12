@@ -1,7 +1,9 @@
 {
     "name": "vladws/mvc-simple",
     "type": "project",
-    "require": {},
+    "require": {
+        "twig/twig": "^3.0"
+    },
 
     "autoload": {
         "psr-4": {

@@ -8,11 +8,22 @@ class Application {
          * URL- section
          *
          */
+
         if(isset($URL[$_SERVER['REQUEST_URI']])) {
             $url_instance = $URL[$_SERVER['REQUEST_URI']];
-            echo ($url_instance->call_method());
+            /*
+             *
+             * TODO:
+             * Middleware-section
+             *
+             */
+            # --
+            $result = $url_instance->call_method();
+
+
+            echo ($result);
         } else {
-            throw new \Exception('Page not found');
+            # throw new \Exception('Page not found');
             # TODO: Handle not found-section
         }
     }

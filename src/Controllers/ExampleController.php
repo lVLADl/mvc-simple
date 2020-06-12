@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 class ExampleController extends Controller {
     public function index() {
-        echo __CLASS__ . ' ' . __METHOD__;
+        global $twig;
+        echo $twig->render('index.twig', ['name' => 'Fabien']);
     }
 }

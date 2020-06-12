@@ -2,7 +2,6 @@
 
 
 namespace App\System\URL;
-# use App\Controllers\ExampleController;
 
 class URLInstance implements HTTPMethods {
     private $path;
@@ -23,11 +22,10 @@ class URLInstance implements HTTPMethods {
 
         $class = 'App\Controllers\\' . $controller_name;
         $instance = new $class;
-        # TODO
 
         $this->controller = $instance;
         $this->controller_method = $controller_method;
-    } # -- +
+    }
     public function call_method() {
         $instance = $this->controller;
         $method = $this->controller_method;
@@ -56,7 +54,7 @@ class URLInstance implements HTTPMethods {
                 break;
         }
         $this->method = $method;
-    } # -- +
+    }
     public function getMethod() {
         $result = null;
         switch ($this->method) {
@@ -77,7 +75,7 @@ class URLInstance implements HTTPMethods {
                 break;
         }
         return $result;
-    } # -- +
+    }
 
     public function setPath(string $path) {
         $this->path = $path;
