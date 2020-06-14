@@ -2,7 +2,8 @@
     "name": "vladws/mvc-simple",
     "type": "project",
     "require": {
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "catfan/medoo": "^1.7"
     },
 
     "autoload": {

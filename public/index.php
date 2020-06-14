@@ -23,6 +23,21 @@ $URL = [];
 require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'urls.php';
 # --
 
+# -- Database
+    # -- Medoo
+    use Medoo\Medoo;
+
+    # Initialize
+    $database = new Medoo([
+        'database_type' => config('general.database_type'),
+        'database_name' => config('general.database_name'),
+        'server' => config('general.server'),
+        'username' => config('general.username'),
+        'password' => config('general.password'),
+    ]);
+    # --
+# --
+
 # -- Twig-template
     # -- Core
     $loader = new \Twig\Loader\FilesystemLoader(
