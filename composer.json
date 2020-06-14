@@ -3,7 +3,8 @@
     "type": "project",
     "require": {
         "twig/twig": "^3.0",
-        "catfan/medoo": "^1.7"
+        "catfan/medoo": "^1.7",
+        "symfony/console": "^5.1"
     },
 
     "autoload": {

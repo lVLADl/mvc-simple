@@ -38,6 +38,19 @@ require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'url
     # --
 # --
 
+# -- Console-commands
+if (php_sapi_name() == "cli") {
+    $console = new \Symfony\Component\Console\Application();
+
+    $commands = config('command.commands');
+    foreach($commands as $command) {
+        $console->add($command);
+    }
+    # ... register commands here
+    $console->run();
+}
+# --
+
 # -- Twig-template
     # -- Core
     $loader = new \Twig\Loader\FilesystemLoader(
