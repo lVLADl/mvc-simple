@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Model;
+namespace App\System\Database;
 
-
-use App\Model\Actions\All;
-use App\Model\Actions\Create;
-use App\Model\Actions\Delete;
-use App\Model\Actions\Update;
-use App\Model\Actions\Where;
+use App\System\Database\Query;
+use App\System\Database\Actions\All;
+use App\System\Database\Actions\Create;
+use App\System\Database\Actions\Delete;
+use App\System\Database\Actions\Update;
+use App\System\Database\Actions\Where;
 use Medoo\Medoo;
 
 abstract class Model implements All, Create, Delete, Update, Where {

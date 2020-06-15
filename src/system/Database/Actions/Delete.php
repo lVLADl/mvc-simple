@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Model\Actions;
+namespace App\System\Database\Actions;
 
 
 interface Delete {
