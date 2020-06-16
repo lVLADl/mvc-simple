@@ -12,8 +12,4 @@ class StringField extends Field {
         parent::__construct($field_name, $options);
         $this->max_length = $max_length;
     }
-    protected function convert_default_value($value)
-    {
-        return "'$value'";
-    }
 }
