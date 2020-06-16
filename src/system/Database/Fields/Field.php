@@ -9,6 +9,12 @@ abstract class Field {
     protected array $options;
 
     protected $type;
+    protected function check_data_type($value): bool {
+        return gettype($value) == $this->type;
+    }
+    protected function convert_default_value($value) {
+        return $value;
+    }
     protected const datatype_database = [
         'integer' => 'INT',
         'text' => 'TEXT',
@@ -23,14 +29,19 @@ abstract class Field {
                 return 'PRIMARY KEY';
             },
             'default' => function($value) {
-                return "DEFAULT " . $value;
+                if($this->check_data_type($value)) {
+                    $out = 'DEFAULT ';
+                    return $out . $this->convert_default_value($value);
+                } else {
+                    throw new \TypeError(__CLASS__ . ' doesn\'t support ' . gettype($value) . '-type, only ' . $this->type);
+                }
             },
             'null' => function($value) {
                 return ($value)?'NULL':'NOT NULL';
             },
-            /*'max_length' => function($value) { TODO
-
-            }*/
+            'unique' => function($value) {
+                return 'UNIQUE';
+            }
             # expand option-list here ...
         ];
         $this->field_name = $field_name;
@@ -54,7 +65,24 @@ abstract class Field {
 
 
     #  => get MySQL- equivalent
-    public abstract function system_convert_to_sql(): array;
+    public function system_convert_to_sql(): array {
+        $fn = $this->field_name;
+
+
+         $type = $this->get_mysql_type_equivalent();
+        if(str_ends_with($type, '(')) {
+            $type .= $this->max_length . ')';
+        }
+
+        $out[$fn][] = $type;
+        foreach($this->getProperties() as $value) {
+            if($value) {
+                $out[$fn][] = $value;
+            }
+        }
+
+        return $out;
+    }
     public function get_mysql_type_equivalent(): string {
         return self::datatype_database[$this->type];
     }
