@@ -34,7 +34,7 @@ abstract class Field {
     protected const datatype_database = [
         'integer' => 'INT',
         'text' => 'TEXT',
-        'boolean' => 'BOOL',
+        'boolean' => 'BOOLEAN',
         'string' => 'VARCHAR(', # if starts with '('-sign, then it's required to be expanded
         'char' => 'CHAR(1)'
     ]; # TODO: delegate it to the children-fields
@@ -60,7 +60,7 @@ abstract class Field {
     # Constructor could be called only in some special cases, such as
     # implementing new properties, ... .
     # Nevertheless, parent constructor should be called
-    public function __construct($field_name, array $options = null) {
+    public function __construct($field_name, array $options = []) {
         if(array_key_exists('validators', $options)){
             foreach($options['validators'] as $validator) {
                 $this->validators[] = $validator;
@@ -76,26 +76,41 @@ abstract class Field {
             },
             'default' => function($value) {
                 $this->validate($value);
-                return 'DEFAULT ' . $this->convert_value($value);
+                return 'DEFAULT (' . $this->convert_value($value) . ')';
             },
-            'null' => function($value) {
-                return ($value)?'NULL':'NOT NULL';
+            'null' => function() {
+                return 'NULL';
             },
-            'unique' => function($value) {
+            'unique' => function() {
                 return 'UNIQUE';
+            },
+            'auto_increment' => function() {
+                return 'AUTO_INCREMENT';
             }
             # expand option-list here ...
         ];
-        $this->field_name = $field_name;
+        $this->field_name = $field_name;    
         if($options) {
             foreach($this->options as $key => $func) {
-                if(isset($options[$key])) {
-                    $this->$key = $func($options[$key]);
+                if(in_array($key, $options, true) and $key!='default') {
+                    $this->$key = $func($options[$key]??null);
+                }
+                if(isset($options['default'])) {
+                    $this->default = $this->options['default']($options['default']);
                 }
             }
         } # set constraints
     }
-    public final function standard_validators() {
+    public function get_constraints() {
+        $out = [];
+        foreach($this->options as $key => $func) {
+            if($this->$key) {
+                $out[] = $this->$key;
+            }
+        }
+        return $out;
+    }
+    public final function standard_validators() { /*TODO-1: */
         return [
             function($value) {
                 /*
@@ -129,7 +144,7 @@ abstract class Field {
         }
 
         $out[$fn][] = $type;
-        foreach($this->getProperties() as $value) {
+        foreach($this->get_constraints() as $value) {
             if($value) {
                 $out[$fn][] = $value;
             }
@@ -144,7 +159,8 @@ abstract class Field {
 
     # <REWRITABLE>
     public function __toString() {
-        return $this->field_name;
+        return $this->field_name . ' ' . self::datatype_database[$this->type] . ' ' . join(', ', $this->get_constraints());
     }
+
     public function __get($name) { }
 }

@@ -2,8 +2,8 @@
 
 
 namespace App\System\Database\Actions;
-use App\System\Database\Query;
+use Tightenco\Collect\Support\Collection;
 
 interface Where {
-    public function where(): Query;
+    public static function where(): Collection;
 }

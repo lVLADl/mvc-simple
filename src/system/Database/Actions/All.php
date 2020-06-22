@@ -2,8 +2,8 @@
 
 
 namespace App\System\Database\Actions;
-use App\System\Database\Query;
+use Tightenco\Collect\Support\Collection;
 
 interface All {
-    public function all(): Query;
+    public static function all(): Collection;
 }

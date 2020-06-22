@@ -2,8 +2,9 @@
 
 
 namespace App\System\Database\Actions;
-use App\System\Database\Query;
+
+use App\System\Database\Model;
 
 interface Create {
-    public function create(): Query;
+    public static function create(): Model;
 }

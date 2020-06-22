@@ -2,8 +2,8 @@
 
 
 namespace App\System\Database\Actions;
-use App\System\Database\Query;
+use App\System\Database\Model;
 
 interface Update {
-    public function update(): Query;
+    public static function update(): Model;
 }

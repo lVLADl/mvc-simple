@@ -11,6 +11,7 @@ Based on the ideas of the others packages such as Laravel, Yii, Symfony, but hig
                     <li>"php public/index.php app:example-command"</li>
                 </ul>
             </li>
+            <li><a href="https://github.com/tightenco/collect">Collections</a> -- laravel-collections into non-laravel project</li>
         </ul>
     </li>
     <li>Front-end
