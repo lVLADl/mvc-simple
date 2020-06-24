@@ -12,19 +12,11 @@ namespace App\System\Database\Fields;
  */
 
 abstract class Field {
-    protected array $validators = [];
+    public array $validators = [];
     public string $field_name;
     protected array $options;
-    private $value;
 
-    public function getValue() {
-        return $this->value;
-    }
-    public function setValue($value){
-        $this->validate($value);
-        $this->value = $value;
-    }
-    private function validate($value) {
+    public function validate($value) {
         foreach($this->validators as $validator) {
             $validator($value);
         }
@@ -36,7 +28,8 @@ abstract class Field {
         'text' => 'TEXT',
         'boolean' => 'BOOLEAN',
         'string' => 'VARCHAR(', # if starts with '('-sign, then it's required to be expanded
-        'char' => 'CHAR(1)'
+        'char' => 'CHAR(1)', # TODO
+        'date' => 'DATE'
     ]; # TODO: delegate it to the children-fields
 
     # Manages in what way, value will be transformed for SQL- queries
@@ -89,7 +82,7 @@ abstract class Field {
             }
             # expand option-list here ...
         ];
-        $this->field_name = $field_name;    
+        $this->field_name = $field_name;
         if($options) {
             foreach($this->options as $key => $func) {
                 if(in_array($key, $options, true) and $key!='default') {
@@ -110,9 +103,11 @@ abstract class Field {
         }
         return $out;
     }
-    public final function standard_validators() { /*TODO-1: */
+
+    # Acceptable for all the data-types
+    protected function standard_validators() { /*TODO-1: */
         return [
-            function($value) {
+            'default-datatype-validator' => function($value) {
                 /*
                  * Validates data-type
                  */
@@ -122,11 +117,18 @@ abstract class Field {
             }
         ];
     }
-    # Example function. This function is created to expand validator's- list;
-    # Each function should accept one argument - value.
-    # Function doesn't return anything. If value is wrong, exception gets invoked
+
+    # Validators for the specific field-types
     public function default_validators() {
-        return [];
+        return [
+            /*
+            Each function should accept one argument - value.
+            Function doesn't return anything. If value is wrong, exception gets invoked
+            function($value) {
+                # ...
+            },
+            */
+        ];
     }
 
     # Reflects field's appearance in the array which's used by MeDoo composer package
@@ -162,5 +164,7 @@ abstract class Field {
         return $this->field_name . ' ' . self::datatype_database[$this->type] . ' ' . join(', ', $this->get_constraints());
     }
 
-    public function __get($name) { }
+    public function __get($name) {
+        return null;
+    }
 }

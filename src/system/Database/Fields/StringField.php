@@ -13,7 +13,7 @@ class StringField extends Field {
         return "'$value'";
     }
 
-    public function __construct(string $field_name, int $max_length, array $options = null) {
+    public function __construct(string $field_name, int $max_length, array $options = []) {
         parent::__construct($field_name, $options);
         $this->max_length = $max_length;
     }

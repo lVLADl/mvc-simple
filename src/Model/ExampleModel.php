@@ -6,21 +6,15 @@ namespace App\Model;
 
 use App\System\Database\Blueprint;
 use App\System\Database\Fields\BooleanField;
+use App\System\Database\Fields\DateField;
 use App\System\Database\Fields\IntegerField;
 use App\System\Database\Fields\StringField;
 use App\System\Database\Model;
+use Carbon\Carbon;
 use Tightenco\Collect\Support\Collection;
 
 class ExampleModel extends Model {
-    public static function all(): Collection
-    {
-        // TODO: Implement all() method.
-    }
-
-    public static function create(): Model
-    {
-        // TODO: Implement create() method.
-    }
+    public static string $model_name = 'example';
 
     public static function update(): Model
     {
@@ -37,26 +31,26 @@ class ExampleModel extends Model {
         // TODO: Implement where() method.
     }
 
-    public static function get(): Model
-    {
-        // TODO: Implement get() method.
-    }
-
      public static function blueprint(Blueprint $blueprint) {
         $blueprint
-            ->add_field(new IntegerField('integer_sample', [
+            /*->add_field(new IntegerField('id', [
             'primary_key',
             'auto_increment',
-            ]))
+            ]))*/
             ->add_field(new StringField('message', 155, [
-                'null',
-                'default' => 'default string value'
+                'primary_key'
              ]))
             ->add_field(new BooleanField('is_published', [
                 'default' => true
             ]))
-            ->add_field(new StringField('weather', 100, [/*TODO*/]));
+            ->add_field(new DateField('date', ['default' => new Carbon('2020-06-23')]))
+            ->add_field(new StringField('my_name', 155));
 
          return $blueprint;
+    }
+
+    public function __toString()
+    {
+        return __CLASS__;
     }
 }

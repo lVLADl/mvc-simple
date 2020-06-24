@@ -8,6 +8,10 @@ require_once __DIR__.'/../vendor/autoload.php';
 define('BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..');
 # --
 
+# -- Error's displaying
+error_reporting(E_ALL ^ E_WARNING); # Remove warnings but leave the rest of the errors
+# --
+
 # -- Helpers
 require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . 'helper_functions.php';
 # --

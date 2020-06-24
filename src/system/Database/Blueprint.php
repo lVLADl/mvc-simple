@@ -6,7 +6,7 @@ namespace App\System\Database;
 
 use App\System\Database\Fields\Field;
 
-class Blueprint {
+class Blueprint implements \Iterator {
     private array $fields;
 
     public function __construct() { }
@@ -22,4 +22,38 @@ class Blueprint {
         }
         return $medoo_columns;
     }
+    public function set($key, $val)
+    {
+        $this->fields[$key] = $val;
+    }
+
+    public function get($key)
+    {
+        return $this->fields[$key];
+    }
+
+    public function current()
+    {
+        return current($this->fields);
+    }
+
+    public function key()
+    {
+        return key($this->fields);
+    }
+
+    public function next(): void
+    {
+        next($this->fields);
+    }
+
+    public function rewind(): void
+    {
+        reset($this->fields);
+    }
+
+    public function valid(): bool
+    {
+        return null !== key($this->fields);
+    } # Iterable
 }

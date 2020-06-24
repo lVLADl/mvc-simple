@@ -5,9 +5,9 @@ namespace App\System\Command;
 
 
 use App\Model\ExampleModel;
+use App\System\Database\Blueprint;
 use App\System\Database\Fields\BooleanField;
 use App\System\Database\Fields\IntegerField;
-use App\System\Database\Fields\StringField;
 use App\System\Database\Model;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,8 +17,7 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        # $this->model_in_progress($input, $output);
-        $this->field_basics_finished();
+        $this->model_instance_in_progress($input, $output);
         return Command::SUCCESS;
     }
 
@@ -55,18 +54,17 @@ class TestCommand extends Command {
         var_export($str_field->system_convert_to_sql());
         */
     }
-    private function query_in_progress(InputInterface $input, OutputInterface $output) {
+    private function query_finished(InputInterface $input, OutputInterface $output) {
         $query = new Collection([1, 2, 3, 'contraband']);
         $query->add(3);
         $query = $query->map(function($k, $v) {
             return $k . $v . "[]";
         });
-//        $query->remove(3);
         foreach($query as $value) {
             $output->writeln($value);
         }
     }
-    private function model_in_progress(InputInterface $input, OutputInterface $output) {
+    private function model_finished(InputInterface $input, OutputInterface $output) {
         $models = config('models.models');
         foreach($models as $model_name => $model) {
             if(config('general.debug')) {
@@ -74,6 +72,27 @@ class TestCommand extends Command {
             } else {
                 forward_static_call([$model, 'create_table'], $model_name);
             }
+        }
+    }
+
+    public function model_instance_in_progress(InputInterface $input, OutputInterface $output) {
+        $db = Model::system_db_connect();
+        $model = ExampleModel::create([
+            'message' => uniqid(),
+            'my_name' => 'not default message'
+        ]);
+
+
+        # $this->is_published;
+        foreach($model->fields as $field_name => $field_arr /* link to the object's specific field => it's class-field-instance */) {
+            $value = $field_arr[0];
+            print "[$field_name => $value]\n";
+                    # -->   [message => 5ef3bad51400d]
+                    # -->   [is_published => 1]
+                    # -->   [date => 2020-06-23]
+                    # -->   [my_name => not default message]
+
+            # $model->is_published;
         }
     }
 }

@@ -2,9 +2,8 @@
 
 
 namespace App\System\Database\Actions;
-
 use App\System\Database\Model;
 
 interface Create {
-    public static function create(): Model;
+    public static function create($args): Model;
 }

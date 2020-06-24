@@ -5,7 +5,8 @@
         "twig/twig": "^3.0",
         "catfan/medoo": "^1.7",
         "symfony/console": "^5.1",
-        "tightenco/collect": "^7.12"
+        "tightenco/collect": "^7.12",
+        "nesbot/carbon": "^2.35"
     },
 
     "autoload": {
