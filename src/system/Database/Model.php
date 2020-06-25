@@ -13,16 +13,39 @@ use App\System\Database\Actions\Update;
 use App\System\Database\Actions\Where;
 use Medoo\Medoo;
 
+
+/*
+ * Almost done, but there are some more things to work out:
+ *  1 - Exceptions-handling: ~10%
+ *  2 - Planned functionality: ~98%
+ *      The custom model takes about 20 lines of code,
+ *      I think, this is awesome and that's what I was
+ *      trying to achieve: minimum of required code
+ *
+ *      1 - add some more functions:
+ *          [] toString
+ *          [] ...
+ *  3 - Refactoring: ~80%
+ *  4 - Fields:
+ *      1 - add more fields: ~60%
+ *      2 - add more parameters like index, ...
+ *  5 - Explanation:
+ *      1 - add more comments, examples for those,
+ *          who will be reviewing this code (rather for the interview,
+ *          I don't think that anybody will be interested to use this
+ *          "framework") ~50%
+ *      2 - remove some of the unnecessary comments (like this one and
+ *          the previous one ~96%
+ *
+ */
+
 abstract class Model implements All, Create, Delete, Update, Where, Get {
     public static string $model_name;
 
-    /*
-     * DB-response-container
-     * TODO: in-progress-№1
-     */
     public array $fields = [];
 
     # Called by the methods like: all, where, ...
+    # Should't be created manually outside of the class's-environment
     private final function __construct(array $args)
     {
         $bp = static::blueprint(new Blueprint);
@@ -44,21 +67,19 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
     public static function get_required_fields(): array {
         $required = [];
         foreach(static::blueprint(new Blueprint()) as $field_name => $field_object) {
-            if((!($field_object->null)) and !($field_object->default)) {
+            if((!($field_object->null)) and !($field_object->default) and !($field_object->auto_increment)) {
                 $required[$field_name] = $field_object;
             }
         }
 
         return $required;
     }
-    public static function get_primary_key_field() {
+    public static function get_primary_key_field(): Field {
         foreach (static::blueprint(new Blueprint()) as $key => $value) {
             if($value->primary_key) {
                 return $value;
             }
         }
-
-        return null;
     }
 
 
@@ -120,9 +141,39 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         }
     }
 
-    public static abstract function update(): Model;
-    public static abstract function delete(): Model;
+    public function update(array $update_arr) {
+        /* TODO: validation, exceptions-handling*/
+        static::system_db_connect()->update(static::$model_name, $update_arr, $this->toArray());
+        /* Call to the get_primary_key_field() to use it's value in the next static::get call */
+        $pk_field_name = static::get_primary_key_field()->field_name;
+        /* Fetch row from the database to actualize the columns in the objects */
+        $update_arr = static::get($this->$pk_field_name);
+        /* Update current instance */
+        foreach($update_arr as $key=>$value) {
+            $this->$key = $value;
+        }
+    }
+
+    public function delete() {
+        $pk_field_name = static::get_primary_key_field()->field_name;
+        $pk_field_value = $this->$pk_field_name;
+
+        static::system_db_connect()->delete(static::$model_name, [
+            $pk_field_name => $pk_field_value
+        ]);
+    }
+
+    /*
+     * Temporary postponed due to some reasons:
+     *  1 - Requires a big amount of time to implement filtering- functionality
+     *  2 - The result is already available in Collections, the only reason is that
+     *      all the data is fetched from the db and after that, filtering is going
+     *      (in case of using Collection's- functions).
+     *
+     *  TODO: Add where- filtering
+     */
     public static abstract function where(): Collection;
+
     public static function get($id): Model {
         /* If row isn't fetched from the db, the exception should be raised */
         $db_record = static::system_db_connect()->get(static::$model_name, '*', [
@@ -155,6 +206,18 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         $db_result = $db->create($table_name, $blueprint->to_medoo_format());
 
         return $db_result;
+    }
+
+    public function toArray(): array {
+        $out_arr = [];
+        foreach ($this->fields as $field_name => $field_arr) {
+            $field_value = $field_arr[0];
+            $field_object = $field_arr[1];
+
+            $out_arr[$field_name] = $field_value;
+        }
+
+        return $out_arr;
     }
 
     public function __toString()

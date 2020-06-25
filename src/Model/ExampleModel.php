@@ -16,16 +16,6 @@ use Tightenco\Collect\Support\Collection;
 class ExampleModel extends Model {
     public static string $model_name = 'example';
 
-    public static function update(): Model
-    {
-        // TODO: Implement update() method.
-    }
-
-    public static function delete(): Model
-    {
-        // TODO: Implement delete() method.
-    }
-
     public static function where(): Collection
     {
         // TODO: Implement where() method.
@@ -33,12 +23,12 @@ class ExampleModel extends Model {
 
      public static function blueprint(Blueprint $blueprint) {
         $blueprint
-            /*->add_field(new IntegerField('id', [
-            'primary_key',
-            'auto_increment',
-            ]))*/
+            ->add_field(new IntegerField('id', [
+                'primary_key',
+                'auto_increment'
+            ]))
             ->add_field(new StringField('message', 155, [
-                'primary_key'
+                'default' => uniqid()
              ]))
             ->add_field(new BooleanField('is_published', [
                 'default' => true
@@ -51,6 +41,6 @@ class ExampleModel extends Model {
 
     public function __toString()
     {
-        return __CLASS__;
+        return "[$this->id]: $this->message";
     }
 }

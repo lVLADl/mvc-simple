@@ -17,7 +17,7 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->model_instance_in_progress($input, $output);
+        $this->delete();
         return Command::SUCCESS;
     }
 
@@ -54,17 +54,17 @@ class TestCommand extends Command {
         var_export($str_field->system_convert_to_sql());
         */
     }
-    private function query_finished(InputInterface $input, OutputInterface $output) {
+    private function query_finished() {
         $query = new Collection([1, 2, 3, 'contraband']);
         $query->add(3);
         $query = $query->map(function($k, $v) {
             return $k . $v . "[]";
         });
         foreach($query as $value) {
-            $output->writeln($value);
+            print $value;
         }
     }
-    private function model_finished(InputInterface $input, OutputInterface $output) {
+    private function model_finished() {
         $models = config('models.models');
         foreach($models as $model_name => $model) {
             if(config('general.debug')) {
@@ -75,7 +75,9 @@ class TestCommand extends Command {
         }
     }
 
-    public function model_instance_in_progress(InputInterface $input, OutputInterface $output) {
+
+    /* Create instance and print the result */
+    public function model_create() {
         $db = Model::system_db_connect();
         $model = ExampleModel::create([
             'message' => uniqid(),
@@ -83,8 +85,7 @@ class TestCommand extends Command {
         ]);
 
 
-        # $this->is_published;
-        foreach($model->fields as $field_name => $field_arr /* link to the object's specific field => it's class-field-instance */) {
+        foreach($model->fields as $field_name => $field_arr /* link to the object's specific field: [field-value => it's class-field-instance] */) {
             $value = $field_arr[0];
             print "[$field_name => $value]\n";
                     # -->   [message => 5ef3bad51400d]
@@ -93,6 +94,37 @@ class TestCommand extends Command {
                     # -->   [my_name => not default message]
 
             # $model->is_published;
+        }
+    }
+    /* Fetch all the records and print them one by one */
+    public function model_all() {
+        return ExampleModel::all();
+    }
+    /* Beautiful printing and toArray-method usage example */
+    public function print_example_model(ExampleModel $model) {
+        print "[\n";
+        foreach($arr = $model->toArray() as $f_name => $f_val) {
+            print " $f_name => $f_val;". (array_key_last($arr)==$f_name?'':"\n");
+        }
+        print "\n]";
+    }
+    public function update() {
+        $model=ExampleModel::get(1);
+        print "Before::";
+        $this->print_example_model($model);
+        $model->update([
+            'message' => 'it\'s working 100% properly and yes and yes'
+        ]);
+
+        print "\nAfter::";
+        $this->print_example_model($model);
+    }
+    public function delete() {
+        $model_2 = ExampleModel::get(2);
+        $model_2->delete();
+        foreach($this->model_all() as $model) {
+            $this->print_example_model($model);
+            print "\n";
         }
     }
 }
