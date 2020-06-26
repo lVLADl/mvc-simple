@@ -7,8 +7,12 @@ namespace App\System\Command;
 use App\Model\ExampleModel;
 use App\System\Database\Blueprint;
 use App\System\Database\Fields\BooleanField;
+use App\System\Database\Fields\CreatedAtField;
+use App\System\Database\Fields\DateTimeField;
 use App\System\Database\Fields\IntegerField;
+use App\System\Database\Fields\UpdatedAtField;
 use App\System\Database\Model;
+use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tightenco\Collect\Support\Collection;
@@ -17,11 +21,12 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->delete();
+
+        print $date = date('m/d/Y h:i:s a', time());
         return Command::SUCCESS;
     }
 
-    private function field_basics_finished() {
+    private function __field_basics_finished() {
         $integer_field = new IntegerField('my_integer_field');
         # var_export($integer_field->system_convert_to_sql());
 
@@ -54,7 +59,7 @@ class TestCommand extends Command {
         var_export($str_field->system_convert_to_sql());
         */
     }
-    private function query_finished() {
+    private function __query_finished() {
         $query = new Collection([1, 2, 3, 'contraband']);
         $query->add(3);
         $query = $query->map(function($k, $v) {
@@ -64,7 +69,7 @@ class TestCommand extends Command {
             print $value;
         }
     }
-    private function model_finished() {
+    private function __model_finished() {
         $models = config('models.models');
         foreach($models as $model_name => $model) {
             if(config('general.debug')) {
@@ -120,11 +125,25 @@ class TestCommand extends Command {
         $this->print_example_model($model);
     }
     public function delete() {
-        $model_2 = ExampleModel::get(2);
-        $model_2->delete();
+        $model = ExampleModel::get(2);
+        if($model) {
+            $model->delete();
+        }
         foreach($this->model_all() as $model) {
             $this->print_example_model($model);
             print "\n";
+        }
+    }
+
+    /* Usage-examples */
+
+    /* Fetch all model rows, then update them and print in a beautiful way */
+    function model_all__update() {
+        foreach($this->model_all() as $model) {
+            $model->update([
+                'message' => 'custom message (upd. ' . $model->id . ')'
+            ]);
+            $this->print_example_model($model);
         }
     }
 }

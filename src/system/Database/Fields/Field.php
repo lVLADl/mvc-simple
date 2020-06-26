@@ -29,7 +29,8 @@ abstract class Field {
         'boolean' => 'BOOLEAN',
         'string' => 'VARCHAR(', # if starts with '('-sign, then it's required to be expanded
         'char' => 'CHAR(1)', # TODO
-        'date' => 'DATE'
+        'date' => 'DATE',
+        'date-time' => 'TIMESTAMP'
     ]; # TODO: delegate it to the children-fields
 
     # Manages in what way, value will be transformed for SQL- queries

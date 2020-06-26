@@ -5,6 +5,8 @@ namespace App\System\Database;
 
 use App\System\Database\Actions\Get;
 use App\System\Database\Fields\Field;
+use App\System\Database\Fields\UpdatedAtField;
+use Carbon\Carbon;
 use Tightenco\Collect\Support\Collection;
 use App\System\Database\Actions\All;
 use App\System\Database\Actions\Create;
@@ -64,6 +66,7 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
     public static function get_fields(): array {
         return iterator_to_array(static::blueprint(new Blueprint()), true);
     }
+
     public static function get_required_fields(): array {
         $required = [];
         foreach(static::blueprint(new Blueprint()) as $field_name => $field_object) {
@@ -74,6 +77,18 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
 
         return $required;
     }
+
+    public static function get_updated_at_field_name() {
+        $updated_at = null;
+        foreach(static::blueprint(new Blueprint()) as $field_name => $field_object) {
+            if($field_object instanceof UpdatedAtField) {
+                return $field_object->field_name;
+            }
+        }
+
+        return;
+    }
+
     public static function get_primary_key_field(): Field {
         foreach (static::blueprint(new Blueprint()) as $key => $value) {
             if($value->primary_key) {
@@ -110,7 +125,7 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         return $collection;
     }
 
-    public static function create($args): Model {
+    public static function create($args) {
         $db = static::system_db_connect();
         $constructor_args = [];
         $required_fields = static::get_required_fields();
@@ -142,6 +157,10 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
     }
 
     public function update(array $update_arr) {
+        if($updated_at_field_arr = static::get_updated_at_field_name()) {
+            $update_arr[$updated_at_field_arr] = Carbon::now()->toDateTimeString();
+        }
+
         /* TODO: validation, exceptions-handling*/
         static::system_db_connect()->update(static::$model_name, $update_arr, $this->toArray());
         /* Call to the get_primary_key_field() to use it's value in the next static::get call */
@@ -174,7 +193,7 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
      */
     public static abstract function where(): Collection;
 
-    public static function get($id): Model {
+    public static function get($id) {
         /* If row isn't fetched from the db, the exception should be raised */
         $db_record = static::system_db_connect()->get(static::$model_name, '*', [
             'id' => $id
