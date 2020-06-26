@@ -8,6 +8,11 @@ require_once __DIR__.'/../vendor/autoload.php';
 define('BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..');
 # --
 
+# -- .env -- $_ENV['SECRET_KEY']
+$dotenv = Dotenv\Dotenv::createImmutable(BASE_DIR . DIRECTORY_SEPARATOR);
+$dotenv->load();
+# --
+
 # -- Error's displaying
 error_reporting(E_ALL ^ E_WARNING); # Remove warnings but leave the rest of the errors
 # --
@@ -40,6 +45,11 @@ require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'url
         'password' => config('general.password'),
     ]);
     # --
+# --
+
+# -- Auth
+    # $config = new \PHPAuth\Config($database->pdo);
+    # $auth = new \PHPAuth\Auth($database->pdo, $config);
 # --
 
 # -- Console-commands

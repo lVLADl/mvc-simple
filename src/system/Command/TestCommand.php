@@ -5,6 +5,7 @@ namespace App\System\Command;
 
 
 use App\Model\ExampleModel;
+use App\Model\UserModel;
 use App\System\Database\Blueprint;
 use App\System\Database\Fields\BooleanField;
 use App\System\Database\Fields\CreatedAtField;
@@ -21,8 +22,7 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-        print $date = date('m/d/Y h:i:s a', time());
+        print env('SECRET_KEY');
         return Command::SUCCESS;
     }
 

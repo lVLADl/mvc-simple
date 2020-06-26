@@ -17,7 +17,7 @@ function path(...$components) {
 
     return $final_path;
 }
-function config($name){ # -- config-name.parameter
+function config($name) { # -- config-name.parameter
     $buf = explode('.', $name);
 
     $config = $buf[0] . '.php';
@@ -25,6 +25,9 @@ function config($name){ # -- config-name.parameter
 
 
     return (include path(BASE_DIR, 'config', $config))[$component] ?? NULL;
+}
+function env($key, $default='') {
+    return $_ENV[$key] ?? $default;
 }
 
 
