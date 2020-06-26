@@ -38,11 +38,11 @@ require_once BASE_DIR . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'url
 
     # Initialize
     $database = new Medoo([
-        'database_type' => config('general.database_type'),
-        'database_name' => config('general.database_name'),
-        'server' => config('general.server'),
-        'username' => config('general.username'),
-        'password' => config('general.password'),
+        'database_type' => env('DB_TYPE'),
+        'database_name' => env('DB_NAME'),
+        'server' => env('DB_HOST'),
+        'username' => env('DB_USERNAME'),
+        'password' => env('DB_PASSWORD'),
     ]);
     # --
 # --

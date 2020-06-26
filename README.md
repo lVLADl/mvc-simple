@@ -18,7 +18,7 @@ Based on the ideas of the others packages such as Laravel, Yii, Symfony, but hig
                 </ul>
             </li>
             <li><a href="https://github.com/tightenco/collect">Collections</a> -- laravel-collections into non-laravel project</li>
-            <li>vlucas/phpdotenv -- parse .env-file</li>
+            <li><a href="https://github.com/vlucas/phpdotenv">vlucas/phpdotenv -- parse .env-file</a></li>
         </ul>
     </li>
     <li>Front-end
