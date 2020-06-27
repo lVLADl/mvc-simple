@@ -33,7 +33,7 @@ class AuthController {
         $user = UserModel::get($email);
         if($user) {
             $user->authorize($password);
-            redirect();
+            redirect('');
         } else {
             $errors = [
                 'error_login_user_not_found' => 'true'
