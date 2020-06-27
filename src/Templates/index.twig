@@ -4,3 +4,15 @@
 {% block body %}
 {% endblock %}
 #}
+
+{% block scripts %}
+    <script>
+        {% if error_login_email or error_login_password %}
+            $("#modalLoginForm").modal()
+        {% endif %}
+
+        {% if error_register_email or error_register_password %}
+            $("#modalRegisterForm").modal()
+        {% endif %}
+    </script>
+{% endblock %}

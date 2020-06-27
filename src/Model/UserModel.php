@@ -27,13 +27,37 @@ class UserModel extends Model {
      public static function blueprint(Blueprint $blueprint) {
         $blueprint
             ->add_field(new StringField('name', 155, ['null']))
-            ->add_field(new StringField('email', 135))
-            ->add_field(new StringField('password', 365))
+            ->add_field(new StringField('email', 135, ['primary_key']))
+            ->add_field(new StringField('password', 365)) # -- hashed
 
             ->add_field(new CreatedAtField)
             ->add_field(new UpdatedAtField);
 
 
          return $blueprint;
+    }
+
+    /*TODO: make Request-class to validate, collect, ... all the necessary (on that lvl, validation will be performed */
+    public static function register(array $args) {
+        /*
+        $args['email'];
+        $args['password'];
+        $args['name'];
+        */
+
+        if(static::all()->where('email', $args['email'])->count() == 0) {
+            $password = $args['password'];
+            $args['password'] = password_hash($password, config('auth.hashing-method'));
+
+            return static::create($args);
+        } else {
+            /*It should be an exception: TODO*/
+            return 'User with chosen email already exist';
+        }
+    }
+
+
+    public function __toString() {
+        return 'User:[' . $this->email .']';
     }
 }

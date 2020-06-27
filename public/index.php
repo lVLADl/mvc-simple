@@ -4,6 +4,10 @@
 require_once __DIR__.'/../vendor/autoload.php';
 # --
 
+# -- Session
+session_start();
+# --
+
 # -- Constants
 define('BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..');
 # --

@@ -54,10 +54,22 @@ function page_404($msg) {
     # TODO: Handle not found-section
 };
 
-function render(string $template_name, array $args) {
+function render(string $template_name, array $args=[]) {
     global $twig;
 
     # TODO: Add middlewares
     $args['app_name'] = (string) config('general.app-name');
     return $twig->render($template_name . '.twig', $args);
+}
+
+
+/* Session */
+function session_add($key, $value) {
+    $_SESSION[$key] = $value;
+}
+function session_remove($key) {
+    unset($_SESSION[$key]);
+}
+function session_get($key) {
+    return $_SESSION[$key];
 }

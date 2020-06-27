@@ -22,8 +22,30 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        print env('SECRET_KEY');
+        # print $this->register() . "\n";
+        # $this->user_get();
+
+        print UserModel::get('testemail2@gmail.com');
+
+        # print env('SECRET_KEY');
         return Command::SUCCESS;
+    }
+
+    /* User */
+    public function register() {
+        $user = UserModel::register([
+            'email' => 'testemail2@gmail.com',
+            'password' => '123456789Zp',
+        ]);
+
+        return $user;
+    }
+    public function user_get() {
+        $users = UserModel::all();
+        foreach($users as $user) {
+            print $user . ' ' . $user->password;
+            print "\n";
+        }
     }
 
     private function __field_basics_finished() {
@@ -79,7 +101,6 @@ class TestCommand extends Command {
             }
         }
     }
-
 
     /* Create instance and print the result */
     public function model_create() {

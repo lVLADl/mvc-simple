@@ -77,7 +77,7 @@ class URLInstance implements HTTPMethods {
     }
 
     public function setPath(string $path) {
-        $this->path = $path;
+        $this->path = explode('?', $path)[0];
     }
     public function getPath()
     {

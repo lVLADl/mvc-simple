@@ -196,13 +196,14 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
     public static function get($id) {
         /* If row isn't fetched from the db, the exception should be raised */
         $db_record = static::system_db_connect()->get(static::$model_name, '*', [
-            'id' => $id
+            static::get_primary_key_field()->field_name => $id
         ]);
 
         $model_instance = null;
         if($db_record) {
             $model_instance = new static($db_record);
         }
+
         return $model_instance;
     }
 
