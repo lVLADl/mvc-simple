@@ -4,30 +4,44 @@
 namespace App\Controllers;
 
 
+use App\Model\UserModel;
+
 class AuthController {
     public function register() {
         return 'Hello from ' . __METHOD__ . '/' . __CLASS__;
     }
+    public function logout() {
+        logout();
+        redirect();
+    }
+
     public function login() {
         $email = @$_POST['email'];
         $password = @$_POST['password'];
 
         if(!$email or !$password) {
-            $url = config('general.url') . '?'; # build absolute path to the index-page
-            /* TODO: add path()- function to build absolute/relative paths */
-
             $errors = [];
+
             if(!$email) {
-                $url .= 'error_login_email=' . urlencode('Email is required') . '&';
+                $errors['error_login_email'] = 'Email is required';
             }
             if(!$password) {
-                $url .= 'error_login_password=' . urlencode('Password is required');
+                $errors['error_login_password'] = 'Password is required';
             }
 
-            header("Location: $url");
-            exit();
+            redirect($errors);
         }
 
-        return 'Hello';
+        $user = UserModel::get($email);
+        if($user) {
+            $user->authorize($password);
+            redirect();
+        } else {
+            $errors = [
+                'error_login_user_not_found' => 'true'
+            ];
+
+            redirect($errors);
+        }
     }
 }

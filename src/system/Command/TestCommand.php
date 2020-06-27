@@ -22,10 +22,11 @@ class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        # print $this->register() . "\n";
+        print $this->register() . "\n";
         # $this->user_get();
 
-        print UserModel::get('testemail2@gmail.com');
+//        print $model = UserModel::get('user@gmail.com');
+//        var_export($model->authorize('user'));
 
         # print env('SECRET_KEY');
         return Command::SUCCESS;
@@ -34,8 +35,8 @@ class TestCommand extends Command {
     /* User */
     public function register() {
         $user = UserModel::register([
-            'email' => 'testemail2@gmail.com',
-            'password' => '123456789Zp',
+            'email' => 'user@gmail.com',
+            'password' => 'user',
         ]);
 
         return $user;

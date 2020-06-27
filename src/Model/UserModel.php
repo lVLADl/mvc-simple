@@ -38,22 +38,28 @@ class UserModel extends Model {
     }
 
     /*TODO: make Request-class to validate, collect, ... all the necessary (on that lvl, validation will be performed */
-    public static function register(array $args) {
-        /*
-        $args['email'];
-        $args['password'];
-        $args['name'];
-        */
-
+    public static function register(array $args): UserModel {
         if(static::all()->where('email', $args['email'])->count() == 0) {
             $password = $args['password'];
             $args['password'] = password_hash($password, config('auth.hashing-method'));
 
             return static::create($args);
         } else {
-            /*It should be an exception: TODO*/
-            return 'User with chosen email already exist';
+            return static::get($args['email']);
         }
+    }
+
+    public function authorize(string $password) {
+        # session_add();
+        # session_remove();
+
+        if(password_verify($password, $this->password)) {
+            session_add('authorized', true);
+            session_add('email', $this->email);
+
+            return true;
+        }
+        return false;
     }
 
 

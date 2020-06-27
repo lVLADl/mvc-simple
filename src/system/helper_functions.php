@@ -73,3 +73,31 @@ function session_remove($key) {
 function session_get($key) {
     return $_SESSION[$key];
 }
+
+
+# -- auth
+function is_authenticated(): bool {
+    return @session_get('authorized') ?? false;
+}
+
+function user(): \App\Model\UserModel {
+    return \App\Model\UserModel::get(session_get('email'));
+}
+
+function logout() {
+    session_remove('authorized');
+    session_remove('email');
+}
+
+function redirect($path='', $get_params=[]) {
+    $url = config('general.url') . $path; # build absolute path to the index-page
+    if(sizeof($get_params) > 0) {
+        $url .= '?';
+    }
+    foreach($get_params as $key => $value) {
+        $url .= "$key=" . urlencode($value) . ((array_key_last($get_params) == $key)?'':'&');
+    }
+
+    header("Location: $url");
+    exit();
+}

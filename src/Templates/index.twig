@@ -7,7 +7,7 @@
 
 {% block scripts %}
     <script>
-        {% if error_login_email or error_login_password %}
+        {% if error_login_email or error_login_password or error_login_user_not_found %}
             $("#modalLoginForm").modal()
         {% endif %}
 
