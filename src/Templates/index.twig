@@ -11,7 +11,7 @@
             $("#modalLoginForm").modal()
         {% endif %}
 
-        {% if error_register_email or error_register_password %}
+        {% if error_register_email or error_register_password or error_register_email_exists %}
             $("#modalRegisterForm").modal()
         {% endif %}
     </script>

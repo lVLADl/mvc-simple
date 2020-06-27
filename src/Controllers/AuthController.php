@@ -7,12 +7,10 @@ namespace App\Controllers;
 use App\Model\UserModel;
 
 class AuthController {
-    public function register() {
-        return 'Hello from ' . __METHOD__ . '/' . __CLASS__;
-    }
+
     public function logout() {
         logout();
-        redirect();
+        redirect('');
     }
 
     public function login() {
@@ -29,7 +27,7 @@ class AuthController {
                 $errors['error_login_password'] = 'Password is required';
             }
 
-            redirect($errors);
+            redirect('', $errors);
         }
 
         $user = UserModel::get($email);
@@ -41,7 +39,43 @@ class AuthController {
                 'error_login_user_not_found' => 'true'
             ];
 
-            redirect($errors);
+            redirect('', $errors);
+        }
+    }
+    public function register() {
+        $name = @$_POST['name'] ?? null;
+
+        $email = @$_POST['email'];
+        $password = @$_POST['password'];
+
+        if(!$email or !$password) {
+            $errors = [];
+
+            if(!$email) {
+                $errors['error_register_email'] = 'Email is required';
+            }
+            if(!$password) {
+                $errors['error_register_password'] = 'Password is required';
+            }
+
+            redirect('', $errors);
+        }
+
+        if(UserModel::all()->where('email', $email)->count()>0) {
+            redirect('', [
+                'error_register_email_exists' => 'Email already exists'
+            ]);
+        }
+
+        $user = UserModel::register([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ]);
+
+        if($user) {
+            $user->authorize($password);
+            redirect('');
         }
     }
 }

@@ -89,11 +89,12 @@ function logout() {
     session_remove('email');
 }
 
-function redirect($path='', $get_params=[]) {
+function redirect($path, $get_params=[]) {
     $url = config('general.url') . $path; # build absolute path to the index-page
     if(sizeof($get_params) > 0) {
         $url .= '?';
     }
+
     foreach($get_params as $key => $value) {
         $url .= "$key=" . urlencode($value) . ((array_key_last($get_params) == $key)?'':'&');
     }
