@@ -5,17 +5,18 @@ namespace App\Controllers;
 
 
 use App\Model\UserModel;
+use App\System\Request;
 
 class AuthController {
 
-    public function logout() {
+    public function logout(Request $request) {
         logout();
         redirect('');
     }
 
-    public function login() {
-        $email = @$_POST['email'];
-        $password = @$_POST['password'];
+    public function login(Request $request) {
+        $email = $request->post('email');
+        $password = $request->post('password');;
 
         if(!$email or !$password) {
             $errors = [];
@@ -42,11 +43,11 @@ class AuthController {
             redirect('', $errors);
         }
     }
-    public function register() {
-        $name = @$_POST['name'] ?? null;
+    public function register(Request $request) {
+        $name = $request->post('name', null);
 
-        $email = @$_POST['email'];
-        $password = @$_POST['password'];
+        $email = $request->post('email');;
+        $password = $request->post('password');
 
         if(!$email or !$password) {
             $errors = [];

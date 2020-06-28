@@ -50,8 +50,7 @@ function delete($url, $controller) {
 
 
 function page_404($msg) {
-    throw new \Exception($msg);
-    # TODO: Handle not found-section
+    return render('404', ['error_msg' => $msg]);
 };
 
 function render(string $template_name, array $args=[]) {

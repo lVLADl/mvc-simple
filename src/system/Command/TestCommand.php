@@ -18,17 +18,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tightenco\Collect\Support\Collection;
 
+
 class TestCommand extends Command {
     protected static $defaultName = 'app:check';
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        print $this->register() . "\n";
-        # $this->user_get();
-
-//        print $model = UserModel::get('user@gmail.com');
-//        var_export($model->authorize('user'));
-
-        # print env('SECRET_KEY');
         return Command::SUCCESS;
     }
 

@@ -3,6 +3,8 @@
 
 namespace App\System\URL;
 
+use App\System\Request;
+
 class URLInstance implements HTTPMethods {
     private $path;
     private $controller;
@@ -26,10 +28,10 @@ class URLInstance implements HTTPMethods {
         $this->controller = $instance;
         $this->controller_method = $controller_method;
     }
-    public function call_method() {
+    public function call_method(Request $request) {
         $instance = $this->controller;
         $method = $this->controller_method;
-        return $instance->$method();
+        return $instance->$method($request);
     }
     public function setMethod(string $method) {
         switch ($method) {

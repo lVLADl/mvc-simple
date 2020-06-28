@@ -22,14 +22,14 @@ class Application {
                  *
                  */
                 # --
-                $result = $url_instance->call_method();
+                $result = $url_instance->call_method(new Request());
 
                 print_r($result);
             } else {
-                page_404($method . ' method is not supported');
+                print page_404($method . ' method is not supported');
             }
         } else {
-            page_404('Page not found');
+            print page_404('Page not found');
         }
     }
 }

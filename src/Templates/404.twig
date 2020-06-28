@@ -1,0 +1,14 @@
+{% extends 'base.twig' %}
+
+{% block body %}
+    <h2 class="not-found" align="center">{{ error_msg }}</h2>
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .not-found{
+            color: darkred;
+            margin-top: 15rem;
+        }
+    </style>
+{% endblock %}

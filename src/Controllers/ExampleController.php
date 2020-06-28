@@ -3,12 +3,11 @@
 
 namespace App\Controllers;
 
+use App\System\Request;
+
 class ExampleController extends Controller {
-    public function index() {
-        $args = [];
-        foreach($_GET as $name=>$value) {
-            $args[$name] = $value;
-        }
+    public function index(Request $request) {
+        $args = $request->get();
 
         $authenticated = $args['authenticated'] = is_authenticated();
         if($authenticated) {

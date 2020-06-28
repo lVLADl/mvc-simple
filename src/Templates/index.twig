@@ -1,18 +1,17 @@
 {% extends 'base.twig' %}
 
-{#
+
 {% block body %}
-{% endblock %}
-#}
+    {#
+        <p>{{ value|test-filter }}</p>
+        This is how to use custom filters declared in src/System/Template/filters.php
+        For more information, I am asking you to visit twig's official website
+        https://twig.symfony.com/
+        #}
 
-{% block scripts %}
-    <script>
-        {% if error_login_email or error_login_password or error_login_user_not_found %}
-            $("#modalLoginForm").modal()
-        {% endif %}
-
-        {% if error_register_email or error_register_password or error_register_email_exists %}
-            $("#modalRegisterForm").modal()
-        {% endif %}
-    </script>
+    <p>Welcome to my simplified copy of Symfony, Laravel and others <br>
+        I used a big amount of their ideas to create this simple MVC- framework just to add the project to my Github <br>
+        You can check it out <a href="https://github.com/lVLADl">here</a>.
+    </p>
+    <hr>
 {% endblock %}
