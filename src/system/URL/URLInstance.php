@@ -3,6 +3,7 @@
 
 namespace App\System\URL;
 
+use App\System\Exceptions\URLNameIsAlreadyUsed;
 use App\System\Request;
 
 class URLInstance implements HTTPMethods {
@@ -10,6 +11,7 @@ class URLInstance implements HTTPMethods {
     private $controller;
     private $controller_method;
     private $method;
+    protected $name;
 
     public function __construct($url, $method, $controller) {
         $this->setPath($url);
@@ -84,5 +86,19 @@ class URLInstance implements HTTPMethods {
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function name(string $name) {
+        global $URL;
+        foreach($URL as $path => $instance) {
+            if(@$instance->getName() == $name) {
+                throw new URLNameIsAlreadyUsed();
+            }
+        }
+
+        $this->name = $name;
+    }
+    public function getName() {
+        return $this->name;
     }
 }

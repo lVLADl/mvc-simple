@@ -1,5 +1,7 @@
 <?php
 namespace App\System;
+use App\System\Exceptions\URLNotFound;
+
 class Application {
     public function __construct() { }
     public function run() {
@@ -22,9 +24,18 @@ class Application {
                  *
                  */
                 # --
-                $result = $url_instance->call_method(new Request());
+                try {
+                    $result = $url_instance->call_method(new Request());
+                } catch(\Exception $exception) {
+                    if(config('general.debug')) {
+                        /* TODO: add special page for displaying exceptions*/
+                        $result = $exception->__toString();
+                    } else {
+                        $result = page_404('Internal server error');
+                    }
+                }
 
-                print_r($result);
+                print_r(@$result);
             } else {
                 print page_404($method . ' method is not supported');
             }

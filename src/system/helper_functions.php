@@ -33,25 +33,30 @@ function env($key, $default='') {
 
 function get($url, $controller) {
     global $URL;
-    $URL[$url] = new \App\System\URL\URLInstance($url, 'GET', $controller);
+    return $URL[$url] = new \App\System\URL\URLInstance($url, 'GET', $controller);
 }
 function post($url, $controller) {
     global $URL;
-    $URL[$url] = new \App\System\URL\URLInstance($url, 'POST', $controller);
+    return $URL[$url] = new \App\System\URL\URLInstance($url, 'POST', $controller);
 }
 function put($url, $controller) {
     global $URL;
-    $URL[$url] = new \App\System\URL\URLInstance($url, 'PUT', $controller);
+    return $URL[$url] = new \App\System\URL\URLInstance($url, 'PUT', $controller);
 }
 function delete($url, $controller) {
     global $URL;
-    $URL[$url] = new \App\System\URL\URLInstance($url, 'DELETE', $controller);
+    return $URL[$url] = new \App\System\URL\URLInstance($url, 'DELETE', $controller);
 }
 
 
-function page_404($msg) {
-    return render('404', ['error_msg' => $msg]);
-};
+
+/* Make one function: they are mostly the same, all the difference is in error-code*/
+function page_404(string $head='Page not found') {
+    return render('error', ['error_header' => $head]);
+}
+function page_500(string $head='Server error') {
+    return render('error', ['error_header' => $head]);
+}
 
 function render(string $template_name, array $args=[]) {
     global $twig;
@@ -89,7 +94,13 @@ function logout() {
 }
 
 function redirect($path, $get_params=[]) {
-    $url = config('general.url') . $path; # build absolute path to the index-page
+    $url = config('general.url'); # build absolute path to the index-page
+    if(!str_ends_with($url, '/') && !(str_starts_with($path, '/'))) {
+        $url .= '/' . $path;
+    } else {
+        $url .= $path;
+    }
+
     if(sizeof($get_params) > 0) {
         $url .= '?';
     }
@@ -100,4 +111,17 @@ function redirect($path, $get_params=[]) {
 
     header("Location: $url");
     exit();
+}
+
+
+/* builds url by route's- name; if not found, returns url to the homepage */
+function buildPathByRoute(string $routeName) {
+    global $URL;
+    foreach($URL as $k=>$v) {
+        if($routeName == @$v->getName()) {
+            return config('general.url') . $k;
+        }
+    }
+
+    throw new \App\System\Exceptions\URLNotFound();
 }

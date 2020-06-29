@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% block body %}
+<div class="error-502" style="margin-top: 6.5rem;">
+    <div class="error-502__text">
+        <h1 class="error-h1" id="error-head">{{ error_header }}</h1>
+        <h2 class="error-h2"><p class="error-p2">You can go back to our <a href="/" class="text-link" style="font-size: 1.9rem;">Homepage</a>.</p></h2>
+    </div>
+</div>
+</div>
+<div class="gears" style="margin-top: 2rem;">
+<div class="gear one">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+</div>
+<div class="gear two">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+</div>
+<div class="gear three">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+</div>
+{% endblock %}
+
+{% block styles %}
+    <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Condensed:100,200,300,400" rel="stylesheet">
+    <link href="css/error.css" rel="stylesheet" type="text/css" />
+{% endblock %}
