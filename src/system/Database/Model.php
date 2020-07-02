@@ -5,7 +5,10 @@ namespace App\System\Database;
 
 use App\System\Database\Actions\Get;
 use App\System\Database\Fields\Field;
+use App\System\Database\Fields\OneToManyRelationField;
+use App\System\Database\Fields\RelationField;
 use App\System\Database\Fields\UpdatedAtField;
+use App\System\Exceptions\ValidationFailed;
 use Carbon\Carbon;
 use Tightenco\Collect\Support\Collection;
 use App\System\Database\Actions\All;
@@ -112,6 +115,7 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
 
     # All the function manages CRUD with the table in the database
     # via Medoo- package
+    /* TODO */
     public static function all(): Collection {
         $db = static::system_db_connect();
         $db_records = $db->select(static::$model_name, '*');
@@ -125,6 +129,27 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         return $collection;
     }
 
+    protected function attach_related_rows(Model $model_instance) {
+        $fks = $model_instance->get_foreign_keys();
+        foreach($fks as $key);
+    }
+    public static function get_foreign_keys(): array {
+        function check_if_foreign(Field $field) {
+            $collection = new Collection;
+            if($field instanceof RelationField) {
+                $collection->add($field);
+            }
+
+            return $collection;
+        }
+        $foreign_fields = array_filter(static::get_fields(), function($field_instance) {
+            return $field_instance instanceof RelationField;
+        });
+
+        return $foreign_fields;
+    }
+
+    # uses get
     public static function create($args) {
         $db = static::system_db_connect();
         $constructor_args = [];
@@ -145,17 +170,17 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
 
             return new static($row);
         } else {
-            /* TODO: it should be a specific ValidationException */
-            /* TODO: create special exceptions, add handling-system, divide them by the level: ~[info, debug, lite, medium, alert, ...] */
             $msg = "\nThis fields are also required: [";
             foreach($required_fields as $key => $field) {
                 $delimiter = (($key===array_key_last($required_fields))?'':', ');
                 $msg .= $field->field_name . $delimiter;
             }
-            print  $msg . ']';
+
+            throw new ValidationFailed($msg . ']');
         }
     }
 
+    # uses get
     public function update(array $update_arr) {
         if($updated_at_field_arr = static::get_updated_at_field_name()) {
             $update_arr[$updated_at_field_arr] = Carbon::now()->toDateTimeString();

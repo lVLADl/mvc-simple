@@ -31,16 +31,18 @@ class Application {
                         /* TODO: add special page for displaying exceptions*/
                         $result = $exception->__toString();
                     } else {
-                        $result = page_404('Internal server error');
+                        $result = response()->error_page(500);
                     }
                 }
 
                 print_r(@$result);
             } else {
-                print page_404($method . ' method is not supported');
+                $result = response()->error_page(404, $method . ' method is not supported');
+                print $result;
             }
         } else {
-            print page_404('Page not found');
+            $result = response()->error_page(404);
+            print $result;
         }
     }
 }

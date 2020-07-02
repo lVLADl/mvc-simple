@@ -14,6 +14,8 @@ class ExampleController extends Controller {
             $args['user'] = user();
         }
 
-        return render('index', $args);
+
+        return response()->render('index', $args);
     }
+
 }

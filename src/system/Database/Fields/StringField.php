@@ -7,7 +7,7 @@ namespace App\System\Database\Fields;
 
 class StringField extends Field {
     public $type = 'string';
-    protected string $max_length;
+    public string $max_length;
     public function convert_value($value)
     {
         return "'$value'";

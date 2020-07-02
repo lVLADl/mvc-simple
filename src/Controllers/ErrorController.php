@@ -8,6 +8,6 @@ use App\System\Request;
 
 class ErrorController {
     public function serverError(Request $request) {
-        return page_500('Internal server error');
+        return response()->error_page(500);
     }
 }

@@ -11,7 +11,7 @@ class AuthController {
 
     public function logout(Request $request) {
         logout();
-        redirect('');
+        response()->redirect('');
     }
 
     public function login(Request $request) {
@@ -28,19 +28,19 @@ class AuthController {
                 $errors['error_login_password'] = 'Password is required';
             }
 
-            redirect('', $errors);
+            response()->redirect('', $errors);
         }
 
         $user = UserModel::get($email);
         if($user) {
             $user->authorize($password);
-            redirect('');
+            response()->redirect('');
         } else {
             $errors = [
                 'error_login_user_not_found' => 'true'
             ];
 
-            redirect('', $errors);
+            response()->redirect('', $errors);
         }
     }
     public function register(Request $request) {
@@ -59,11 +59,11 @@ class AuthController {
                 $errors['error_register_password'] = 'Password is required';
             }
 
-            redirect('', $errors);
+            response()->redirect('', $errors);
         }
 
         if(UserModel::all()->where('email', $email)->count()>0) {
-            redirect('', [
+            response()->redirect('', [
                 'error_register_email_exists' => 'Email already exists'
             ]);
         }
@@ -76,7 +76,7 @@ class AuthController {
 
         if($user) {
             $user->authorize($password);
-            redirect('');
+            response()->redirect('');
         }
     }
 }

@@ -50,9 +50,6 @@ class UserModel extends Model {
     }
 
     public function authorize(string $password) {
-        # session_add();
-        # session_remove();
-
         if(password_verify($password, $this->password)) {
             session_add('authorized', true);
             session_add('email', $this->email);
