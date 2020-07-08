@@ -8,6 +8,7 @@ use App\System\Database\Fields\Field;
 use App\System\Database\Fields\OneToManyRelationField;
 use App\System\Database\Fields\RelationField;
 use App\System\Database\Fields\UpdatedAtField;
+use App\System\Exceptions\DbRowNotFound;
 use App\System\Exceptions\ValidationFailed;
 use Carbon\Carbon;
 use Tightenco\Collect\Support\Collection;
@@ -57,7 +58,11 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         foreach($bp as $field) {
             $field_name = $field->field_name;
 
-            $this->$field_name = $args[$field_name];
+            if($field instanceof RelationField) {
+                $this->$field_name = ($field->related_class)::get($args[$field_name]);
+            } else {
+                $this->$field_name = $args[$field_name];
+            }
 
             # Link to the field: did it because all of the models are different, so this array keeps
             # all the links to fields; this also allows this model to be iterable
@@ -129,24 +134,15 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         return $collection;
     }
 
+    // TODO
     protected function attach_related_rows(Model $model_instance) {
         $fks = $model_instance->get_foreign_keys();
         foreach($fks as $key);
     }
     public static function get_foreign_keys(): array {
-        function check_if_foreign(Field $field) {
-            $collection = new Collection;
-            if($field instanceof RelationField) {
-                $collection->add($field);
-            }
-
-            return $collection;
-        }
-        $foreign_fields = array_filter(static::get_fields(), function($field_instance) {
+        return array_filter(static::get_fields(), function($field_instance) {
             return $field_instance instanceof RelationField;
         });
-
-        return $foreign_fields;
     }
 
     # uses get
@@ -227,6 +223,10 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         $model_instance = null;
         if($db_record) {
             $model_instance = new static($db_record);
+        }
+
+        if(!$model_instance) {
+            throw new DbRowNotFound('Row not found in the database');
         }
 
         return $model_instance;

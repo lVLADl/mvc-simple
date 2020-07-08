@@ -15,7 +15,7 @@ class ExampleController extends Controller {
         if($authenticated) {
             $args['user'] = user();
         }
-
+        
         return response()->render('index', $args);
     }
 

@@ -6,7 +6,5 @@ return [
 
         "role" => \App\Model\Role::class,
         "role_user" => \App\Model\RoleUser::class,
-
-
     ]
 ];

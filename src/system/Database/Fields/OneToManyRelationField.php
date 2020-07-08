@@ -12,6 +12,8 @@ class OneToManyRelationField extends RelationField {
     public function __construct(string $field_name, string $class_name, string $foreign_key_field_name, array $options = []) {
         $related_class = config("models.models")[$class_name];
         $related_class_blueprint = ($related_class)::blueprint(new Blueprint);
+
+        $this->related_class = config("models.models")[$class_name];
         $this->related_field = $related_class_field = $related_class_blueprint->get($foreign_key_field_name);
 
         if($related_class_field) {

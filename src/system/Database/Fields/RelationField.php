@@ -3,7 +3,10 @@
 
 namespace App\System\Database\Fields;
 
+use App\System\Database\Model;
+
 abstract class RelationField extends Field {
+    public $related_class;
     public Field $related_field;
 
     public $type;
