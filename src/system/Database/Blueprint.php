@@ -7,7 +7,8 @@ namespace App\System\Database;
 use App\System\Database\Fields\Field;
 
 class Blueprint implements \Iterator {
-    private array $fields;
+    private array $fields = [];
+    private array $constraint = [];
 
     public function __construct() { }
     public function add_field(Field $field) {
@@ -20,8 +21,34 @@ class Blueprint implements \Iterator {
         foreach($this->fields as $field_name => $field) {
             $medoo_columns[$field_name] = $field->system_convert_to_sql()[$field_name];
         }
+
+        # Add unique-constraint
+        if(isset($this->constraint)) {
+            if(isset($this->constraint['unique'])) {
+                foreach($this->constraint['unique'] as $unique_item) {
+                    $medoo_columns[] = $unique_item;
+                }
+            }
+        }
         return $medoo_columns;
     }
+
+    public function add_unique(array $fields, string $constraint_name='') {
+        if(!$constraint_name) {
+            foreach($fields as $i => $field) {
+                $constraint_name .= $field . (($i == array_key_last($fields))?'':'_');
+            }
+        }
+        $unique = "CONSTRAINT $constraint_name UNIQUE (";
+        foreach($fields as $i=>$field) {
+            $unique .= $field . (($i==array_key_last($fields))?'':', ');
+        }
+        $this->constraint['unique'][] = $unique . ')';
+
+        return $this;
+    }
+
+
     public function set($key, $val)
     {
         $this->fields[$key] = $val;

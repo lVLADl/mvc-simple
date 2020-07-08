@@ -39,6 +39,7 @@ class UserModel extends Model {
 
     /*TODO: make Request-class to validate, collect, ... all the necessary (on that lvl, validation will be performed */
     public static function register(array $args): UserModel {
+        /* replace with unique-constraint */
         if(static::all()->where('email', $args['email'])->count() == 0) {
             $password = $args['password'];
             $args['password'] = password_hash($password, config('auth.hashing-method'));

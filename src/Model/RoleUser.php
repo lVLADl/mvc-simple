@@ -13,7 +13,7 @@ use App\System\Database\Model;
 use Tightenco\Collect\Support\Collection;
 
 class RoleUser extends Model {
-    public static string $model_name = 'example';
+    public static string $model_name = 'role_user';
 
     public static function where(): Collection
     {
@@ -26,6 +26,8 @@ class RoleUser extends Model {
 
             ->add_field(new OneToManyRelationField('user_id', 'user', 'email'))
             ->add_field(new OneToManyRelationField('role_id', 'role', 'id'))
+
+            ->add_unique(['role_id', 'user_id'])
 
             ->add_field(new CreatedAtField)
             ->add_field(new UpdatedAtField);

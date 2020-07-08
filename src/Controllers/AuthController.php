@@ -62,6 +62,7 @@ class AuthController {
             response()->redirect('', $errors);
         }
 
+        /* TODO: replace with the unique-constraint */
         if(UserModel::all()->where('email', $email)->count()>0) {
             response()->redirect('', [
                 'error_register_email_exists' => 'Email already exists'

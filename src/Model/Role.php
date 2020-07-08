@@ -13,7 +13,7 @@ use App\System\Database\Model;
 use Tightenco\Collect\Support\Collection;
 
 class Role extends Model {
-    public static string $model_name = 'example';
+    public static string $model_name = 'role';
 
     public static function where(): Collection
     {
@@ -22,7 +22,7 @@ class Role extends Model {
 
      public static function blueprint(Blueprint $blueprint) {
         $blueprint
-            ->add_field(new StringField('role_name', 255))
+            ->add_field(new StringField('role_name', 255, ['unique']))
             ->add_field(new IntegerField('id', ['primary_key', 'auto_increment']))
 
             ->add_field(new CreatedAtField)
