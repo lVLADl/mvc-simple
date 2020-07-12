@@ -5,15 +5,10 @@ namespace App\Model;
 
 
 use App\System\Database\Blueprint;
-use App\System\Database\Fields\BooleanField;
 use App\System\Database\Fields\CreatedAtField;
-use App\System\Database\Fields\DateField;
-use App\System\Database\Fields\DateTimeField;
-use App\System\Database\Fields\IntegerField;
 use App\System\Database\Fields\StringField;
 use App\System\Database\Fields\UpdatedAtField;
 use App\System\Database\Model;
-use Carbon\Carbon;
 use Tightenco\Collect\Support\Collection;
 
 class UserModel extends Model {
@@ -22,6 +17,11 @@ class UserModel extends Model {
     public static function where(): Collection
     {
         // TODO: Implement where() method.
+    }
+
+    # TODO: remove static
+    public static function roles_foreign() {
+        return static::one_to_many(Role::class, RoleUser::class, 'user_id', 'role_id');
     }
 
      public static function blueprint(Blueprint $blueprint) {

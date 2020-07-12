@@ -65,7 +65,7 @@ function session_remove($key) {
     unset($_SESSION[$key]);
 }
 function session_get($key) {
-    return $_SESSION[$key];
+    return $_SESSION[$key] ?? null;
 }
 
 

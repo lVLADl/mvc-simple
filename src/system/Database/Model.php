@@ -49,6 +49,7 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
     public static string $model_name;
 
     public array $fields = [];
+    public $pk;
 
     # Called by the methods like: all, where, ...
     # Should't be created manually outside of the class's-environment
@@ -57,7 +58,6 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         $bp = static::blueprint(new Blueprint);
         foreach($bp as $field) {
             $field_name = $field->field_name;
-
             if($field instanceof RelationField) {
                 $this->$field_name = ($field->related_class)::get($args[$field_name]);
             } else {
@@ -68,6 +68,29 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
             # all the links to fields; this also allows this model to be iterable
             $this->fields[$field_name] = [&$this->$field_name, $field];
         }
+
+        $pk_name = static::get_primary_key_field()->field_name;
+        $this->pk = $this->$pk_name;
+
+        # process foreign-relations
+        foreach(get_class_methods($this) as $property) {
+            if(str_ends_with($property, 'foreign')) {
+                $foreign_class = $this->$property(/*todo: place what's below into these function */);
+                $foreign_field_name = explode('_foreign', $property)[0];
+                $this->$foreign_field_name = $foreign_class::all()->where(/*todo get associated field*/'user_id', $this->pk);
+
+                # static::one_to_many();
+            }
+        }
+    }
+
+    public static final function one_to_many($related_model_class /* Role */, $associated_model_class/* RoleUser */, $associated_foreign_key /* user_id */, $associated_related_key /* role_id */): array {
+        /* This function is designed to be extended in future */
+        return [
+            'related_model' => $related_model_class,
+            'associated_model' => $associated_model_class,
+            'associated_key'
+        ];
     }
 
     # TODO: refactor constructor to use this method
