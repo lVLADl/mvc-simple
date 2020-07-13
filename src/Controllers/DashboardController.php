@@ -3,9 +3,11 @@
 
 namespace App\Controllers;
 
+
+use App\System\Database\Model;
 use App\System\Request;
 
-class ExampleController extends Controller {
+class DashboardController {
     public function index(Request $request) {
         $args = $request->get();
         // TODO: add these kind of functions to the templates (make new layer)
@@ -15,7 +17,11 @@ class ExampleController extends Controller {
             $args['user'] = user();
         }
 
-        return response()->render('index', $args);
-    }
+        foreach(config('models.models') as $model) {
+            $m_name = $model::$model_name;
+            $out['models'][$m_name] = str_replace(' ', '', ucwords(str_replace('_', ' ', $m_name)));
+        }
 
+        return response()->render('admin/index', $out);
+    }
 }

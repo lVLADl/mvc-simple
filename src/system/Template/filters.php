@@ -8,6 +8,6 @@ $twig->addFilter(new \Twig\TwigFilter('date', function($value) {
 }));
 */
 
-$twig->addFunction(new \Twig\TwigFunction('buildPathByRoute', function(string $routeName) {
-    return buildPathByRoute($routeName);
+$twig->addFunction(new \Twig\TwigFunction('buildPathByRoute', function(string $routeName, array $args=[]) {
+    return buildPathByRoute($routeName, $args);
 }));

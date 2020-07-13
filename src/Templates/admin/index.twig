@@ -1,0 +1,27 @@
+{% extends 'base.twig' %}
+
+{# Remove header and footer from the main site #}
+{% block headbar %}
+    <nav class="navbar navbar-dark bg-danger">
+        <a class="navbar-brand" href="{{ buildPathByRoute('admin:index') }}">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        </button>
+        <a href="#" style="color: white;">
+            {# ToDo: add auth to the admin-dashboard #}
+            {% if authenticated %}
+                Logout
+            {% else %}
+                Login
+            {% endif %}
+        </a>
+    </nav>
+{% endblock %}
+{% block footer %}{% endblock %}
+
+
+{% block body %}
+    {% for model_url, model_name in models %}
+        <li><a href="{{ buildPathByRoute('admin:index', {'model': model_url}) }}">{{ model_url }}:{{ model_name }}</a></li>
+    {% endfor %}
+{% endblock %}

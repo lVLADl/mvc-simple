@@ -23,16 +23,7 @@
     <title>{% block title %}{{ app_name }}{% endblock %}</title>
 </head>
 <body {% block body_properties %}{% endblock %}>
-{% include 'auth/login.modal.twig' %}
-{% include 'auth/register.modal.twig' %}
-{% include 'header.twig' %}
-<div class="container">
-    {% block body %}{% endblock %}
-</div>
 
-{% block footer %}
-    {% include 'footer.twig' %}
-{% endblock %}
 <!-- MDBootstrap -->
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -43,16 +34,29 @@
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
 
-<!-- Auth handling exceptions -->
-<script>
-    {% if error_login_email or error_login_password or error_login_user_not_found %}
-    $("#modalLoginForm").modal()
-    {% endif %}
 
-    {% if error_register_email or error_register_password or error_register_email_exists %}
-    $("#modalRegisterForm").modal()
-    {% endif %}
-</script>
+{% block headbar %}
+    {% include 'auth/login.modal.twig' %}
+    {% include 'auth/register.modal.twig' %}
+    {% include 'header.twig' %}
+    <!-- Auth handling exceptions -->
+    <script>
+        {% if error_login_email or error_login_password or error_login_user_not_found %}
+        $("#modalLoginForm").modal()
+        {% endif %}
+
+        {% if error_register_email or error_register_password or error_register_email_exists %}
+        $("#modalRegisterForm").modal()
+        {% endif %}
+    </script>
+{% endblock %}
+
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+{% block footer %}
+    {% include 'footer.twig' %}
+{% endblock %}
 
 {% block scripts %}{% endblock %}
 </body>

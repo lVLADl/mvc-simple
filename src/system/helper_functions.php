@@ -85,11 +85,25 @@ function logout() {
 
 
 /* builds url by route's- name; if not found, returns url to the homepage */
-function buildPathByRoute(string $routeName) {
+function buildPathByRoute($routeName, $args=[]) {
     global $URL;
     foreach($URL as $k=>$v) {
         if($routeName == @$v->getName()) {
-            return config('general.url') . $k;
+            $url = config('general.url') . $k;
+            if($args) {
+                $url .= '?';
+                foreach($args as $ak => $av) {
+                    /* TODO */
+                    if(array_key_last($args) == $ak) {
+                        $sep = '';
+                    } else {
+                        $sep = '&';
+                    }
+
+                    $url .= "$ak=$av" . $sep;
+                }
+            }
+            return $url;
         }
     }
 

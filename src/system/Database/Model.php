@@ -75,15 +75,16 @@ abstract class Model implements All, Create, Delete, Update, Where, Get {
         # process foreign-relations
         foreach(get_class_methods($this) as $property) {
             if(str_ends_with($property, 'foreign')) {
-                $foreign_class = $this->$property(/*todo: place what's below into these function */);
-                $foreign_field_name = explode('_foreign', $property)[0];
-                $this->$foreign_field_name = $foreign_class::all()->where(/*todo get associated field*/'user_id', $this->pk);
+                // $foreign_class = $this->$property(/*todo: place what's below into these function */);
+                // $foreign_field_name = explode('_foreign', $property)[0];
+                // $this->$foreign_field_name = $foreign_class::all()->where(/*todo get associated field*/'user_id', $this->pk);
 
-                # static::one_to_many();
+                // static::one_to_many();
             }
         }
     }
 
+    # todo
     public static final function one_to_many($related_model_class /* Role */, $associated_model_class/* RoleUser */, $associated_foreign_key /* user_id */, $associated_related_key /* role_id */): array {
         /* This function is designed to be extended in future */
         return [
